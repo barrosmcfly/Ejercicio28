@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .miCanvas {
+            border: 1px solid;
+        }
+    </style>
+    <script src="p5.js"></script>
+</head>
+
+<body>
+    <script>
+
+        let listaCirculos = []; // Array de circulos
+        class Circulo {
+            constructor(posX, posY, radio, color) {
+                this.posX = posX;
+                this.posY = posY;
+                this.radio = radio;
+                this.color = color;
+            }
+            dibujar(){
+                strokeWeight(1);
+                fill(this.color);
+                //noFill()
+                circle(this.posX, this.posY, this.radio*2)
+            }
+            mover(){
+                let velocidad = 10
+                this.posY += velocidad;
+            }
+        }
+
+        function pintar() {
+             background(255);
+          
+            listaCirculos.forEach(circulo => {
+                circulo.dibujar()
+            })
+
+        }
+        function mover(){
+            listaCirculos.forEach(circulo => {
+                circulo.mover()
+            })
+        }
+
+        function numeroAleatorio(min, max) {
+            return Math.round(Math.random() * (max - min) + min);
+        }
+        function colorAleatorio(){
+            var num = numeroAleatorio(0,8)
+            switch(num){
+                case 0: return 'red';
+                case 1: return 'blue';
+                case 2: return 'green';
+                case 3: return 'orange';
+                case 4: return 'pink';
+                case 5: return 'black';
+                case 6: return 'yellow';
+                case 7: return 'brown';
+                case 8: return 'grey';
+            }
+        }
+
+        function generarNuevoCirculoAleatorio() {
+            let posX = numeroAleatorio(0, 500);
+            let posY = numeroAleatorio(0, 500);
+            let radio = numeroAleatorio(3, 10);
+            let color = colorAleatorio();
+            let circulo = new Circulo(posX, posY, radio, color);
+            return circulo;
+        }
+
+        function generarYGuardarNuevoCirculo() {
+            let circulo = generarNuevoCirculoAleatorio()
+            listaCirculos.push(circulo);
+        }
+
+        function borrarCirculosFueraPantalla() {
+            let nuevaLista = []
+            listaCirculos.forEach(circulo => {
+                if(circulo.posY < canvas.height){
+                    nuevaLista.push(circulo)
+                }
+            })
+            listaCirculos = nuevaLista
+        }
+
+     
+        function setup() {
+            createCanvas(400, 400);
+            frameRate( 30 )
+        }
+
+        function draw() {
+            background(220);
+            generarYGuardarNuevoCirculo()
+            pintar()
+            mover()
+            borrarCirculosFueraPantalla()
+        }
+    </script>
+</body>
+
+</html>
